@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import FormGenerator from '@/components/FormGenerator.vue';
+import CustomDatePicker from '@/components/CustomDatePicker.vue';
 import type { Schema } from '@/types/schema';
 import { ref } from 'vue';
 import { useStore } from 'vuex';
@@ -7,18 +8,6 @@ import { useStore } from 'vuex';
 const store = useStore()
 
 const schema = ref<Schema>({
-  email: {
-    type: 'input',
-    label: 'Email',
-    attrs: {
-      type: 'email',
-      placeholder: 'Введите email'
-    },
-    rules: [
-      (value: any) => value.trim() !== '' || 'Поле обязательно для заполнения',
-      (value: any) => /.+@.+\..+/.test(value) || 'Неверный формат email'
-    ]
-  },
   country: {
     type: 'select',
     label: 'Страна',
@@ -37,6 +26,10 @@ const schema = ref<Schema>({
       }
     ]
   },
+  birthdate: {
+    type: 'custom',
+    label: 'Дата рождения'
+  },
   agree: {
     type: 'checkbox',
     label: 'Согласен с условиями',
@@ -47,24 +40,24 @@ const schema = ref<Schema>({
 })
 
 const formData = ref({
-  email: '',
   country: 'ru',
+  birthdate: '',
   agree: false
 })
 
 const saveForm = (data: any) => {
   store.dispatch('saveForm', data)
   formData.value = {
-    email: '',
     country: 'ru',
+    birthdate: '',
     agree: false
   }
 }
 
 const resetForm = () => {
   formData.value = {
-    email: '',
     country: 'ru',
+    birthdate: '',
     agree: false
   }
 }
@@ -79,8 +72,11 @@ const resetForm = () => {
       @save="saveForm"
       @cancel="resetForm"
     >
-      <template #email>
-        <input type="email" v-model="formData.email" placeholder="Кастомный Email">
+      <template #birthdate>
+        <CustomDatePicker 
+          :modelValue="formData.birthdate" 
+          @update:modelValue="(value) => formData.birthdate = value"
+        />
       </template>
     </FormGenerator>
   </div>

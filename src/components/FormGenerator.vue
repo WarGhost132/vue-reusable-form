@@ -38,57 +38,61 @@ const cancel = () => {
     <div v-for="(field, name) in schema" :key="name" class="form-group">
       <label v-if="field.type !== 'checkbox'" :for="name">{{ field.label }}</label>
 
-      <div v-if="field.type === 'input'">
-        <input
-          :id="name"
-          v-model="model![name]"
-          v-bind="field.attrs"
-          @blur="validateField(name, model![name])"
-          :class="{ 'input-error': errors[name] }"
-        />
-        <ErrorMessage :error="errors[name]" />
-      </div>
+      <slot v-if="$slots[name]" :name="name" :model="model![name]" />
 
-      <div v-else-if="field.type === 'textarea'">
-        <textarea
-          :id="name"
-          v-model="model![name]"
-          v-bind="field.attrs"
-          @blur="validateField(name, model![name])"
-          :class="{ 'input-error': errors[name] }"
-        ></textarea>
-        <ErrorMessage :error="errors[name]" />
-      </div>
-
-      <div v-else-if="field.type === 'select'">
-        <select
-          :id="name"
-          v-model="model![name]"
-          v-bind="field.attrs"
-          @blur="validateField(name, model![name])"
-          :class="{ 'input-error': errors[name] }"
-        >
-          <option v-for="option in field.options" :key="option.value" :value="option.value">{{ option.label }}</option>
-        </select>
-        <ErrorMessage :error="errors[name]" />
-      </div>
-
-      <div v-else-if="field.type === 'checkbox'" class="checkbox-container">
-        <div class="checkbox-items">
+      <template v-else>
+        <div v-if="field.type === 'input'">
           <input
-            type="checkbox"
             :id="name"
             v-model="model![name]"
             v-bind="field.attrs"
             @blur="validateField(name, model![name])"
             :class="{ 'input-error': errors[name] }"
           />
-          <label :for="name">{{ field.label }}</label>
-        </div>
-        <div>
           <ErrorMessage :error="errors[name]" />
         </div>
-      </div>
+  
+        <div v-else-if="field.type === 'textarea'">
+          <textarea
+            :id="name"
+            v-model="model![name]"
+            v-bind="field.attrs"
+            @blur="validateField(name, model![name])"
+            :class="{ 'input-error': errors[name] }"
+          ></textarea>
+          <ErrorMessage :error="errors[name]" />
+        </div>
+  
+        <div v-else-if="field.type === 'select'">
+          <select
+            :id="name"
+            v-model="model![name]"
+            v-bind="field.attrs"
+            @blur="validateField(name, model![name])"
+            :class="{ 'input-error': errors[name] }"
+          >
+            <option v-for="option in field.options" :key="option.value" :value="option.value">{{ option.label }}</option>
+          </select>
+          <ErrorMessage :error="errors[name]" />
+        </div>
+  
+        <div v-else-if="field.type === 'checkbox'" class="checkbox-container">
+          <div class="checkbox-items">
+            <input
+              type="checkbox"
+              :id="name"
+              v-model="model![name]"
+              v-bind="field.attrs"
+              @blur="validateField(name, model![name])"
+              :class="{ 'input-error': errors[name] }"
+            />
+            <label :for="name">{{ field.label }}</label>
+          </div>
+          <div>
+            <ErrorMessage :error="errors[name]" />
+          </div>
+        </div>
+      </template>
     </div>
 
     <div class="buttons">
