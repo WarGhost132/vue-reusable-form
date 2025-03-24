@@ -1,33 +1,13 @@
-# vue-reusable-form
+# Vue Form Generator
 
-This template should help get you started developing with Vue 3 in Vite.
+Этот проект предоставляет динамическую форму, которая генерируется на основе схемы, передаваемой в компонент. Компонент формы автоматически управляет валидацией, в том числе проверкой обязательных полей и формата данных, и поддерживает различные типы полей, такие как `input`, `textarea`, `select`, и `checkbox`.
 
-## Recommended IDE Setup
+## Основные особенности
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- **Динамическое создание формы**: форма генерируется на основе схемы, которую можно передать в компонент.
+- **Валидация формы**: поддерживаются настраиваемые правила валидации для каждого поля формы.
+- **Поддержка различных типов полей**: поддерживаются типы `input`, `textarea`, `select`, и `checkbox`.
+- **Поддержка кастомных атрибутов**: можно добавлять кастомные атрибуты для каждого поля.
+- **Обработчики событий**: возможность обработать событие сохранения и отмены с возвратом данных.
 
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
+Можете протестировать сами: https://vue-reusable-form.netlify.app/

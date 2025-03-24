@@ -51,6 +51,11 @@ const formData = ref({
 
 const saveForm = (data: any) => {
   store.dispatch('saveForm', data)
+  formData.value = {
+    name: '',
+    email: '',
+    message: ''
+  }
 }
 
 const resetForm = () => {
