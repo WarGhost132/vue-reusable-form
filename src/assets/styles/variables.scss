@@ -1,0 +1,4 @@
+@use "sass:color";
+
+$primary-color: black;
+$primary-color-hover: color.adjust($primary-color, $lightness: 10%)

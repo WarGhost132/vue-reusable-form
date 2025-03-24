@@ -1,0 +1,6 @@
+@use "@/assets/styles/variables.scss" as *;
+
+body {
+  font-family: Arial, sans-serif;
+  background: $primary-color;
+}
