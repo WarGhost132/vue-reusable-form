@@ -1,18 +1,23 @@
 <script lang="ts" setup>
 import FormGenerator from '@/components/FormGenerator.vue';
+import type { Schema } from '@/types/schema';
 import { ref } from 'vue';
 import { useStore } from 'vuex';
 
 const store = useStore()
 
-const schema = ref({
+const schema = ref<Schema>({
   email: {
     type: 'input',
     label: 'Email',
     attrs: {
       type: 'email',
       placeholder: 'Введите email'
-    }
+    },
+    rules: [
+      (value: any) => value.trim() !== '' || 'Поле обязательно для заполнения',
+      (value: any) => /.+@.+\..+/.test(value) || 'Неверный формат email'
+    ]
   },
   country: {
     type: 'select',
@@ -34,7 +39,10 @@ const schema = ref({
   },
   agree: {
     type: 'checkbox',
-    label: 'Согласен с условиями'
+    label: 'Согласен с условиями',
+    rules: [
+      (value: any) => value || 'Вы должны согласиться с условиями'
+    ]
   }
 })
 
@@ -74,11 +82,6 @@ const resetForm = () => {
 </template>
 
 <style lang="scss" scoped>
-h1 {
-  text-align: center;
-  margin-bottom: 10px;
-}
-
 input {
   width: 100%;
   padding: 0.5rem;

@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
+import { useFormValidation } from '@/composables/useForm'
+import ErrorMessage from '@/components/ErrorMessage.vue'
 
 const props = defineProps({
   schema: Object,
@@ -14,7 +16,17 @@ watch(() => props.modelValue, (newValue) => {
   model.value = newValue
 }, { deep: true })
 
-const save = () => emit('save', model)
+const validationRules = props.schema || {}
+const { isValid, errors, validateField, validateForm } = useFormValidation(validationRules)
+
+const save = () => {
+  if (model.value) {
+    validateForm(model.value)
+    if (isValid.value) {
+      emit('save', model)
+    }
+  }
+}
 const cancel = () => {
   model.value = { ...props.modelValue }
   emit('cancel')
@@ -26,20 +38,57 @@ const cancel = () => {
     <div v-for="(field, name) in schema" :key="name" class="form-group">
       <label v-if="field.type !== 'checkbox'" :for="name">{{ field.label }}</label>
 
-      <slot :name="name">
-        <input v-if="field.type === 'input'" :id="name" v-model="model![name]" v-bind="field.attrs">
+      <div v-if="field.type === 'input'">
+        <input
+          :id="name"
+          v-model="model![name]"
+          v-bind="field.attrs"
+          @blur="validateField(name, model![name])"
+          :class="{ 'input-error': errors[name] }"
+        />
+        <ErrorMessage :error="errors[name]" />
+      </div>
 
-        <textarea v-else-if="field.type === 'textarea'" :id="name" v-model="model![name]" v-bind="field.attrs"></textarea>
+      <div v-else-if="field.type === 'textarea'">
+        <textarea
+          :id="name"
+          v-model="model![name]"
+          v-bind="field.attrs"
+          @blur="validateField(name, model![name])"
+          :class="{ 'input-error': errors[name] }"
+        ></textarea>
+        <ErrorMessage :error="errors[name]" />
+      </div>
 
-        <select v-else-if="field.type === 'select'" :id="name" v-model="model![name]" v-bind="field.attrs">
+      <div v-else-if="field.type === 'select'">
+        <select
+          :id="name"
+          v-model="model![name]"
+          v-bind="field.attrs"
+          @blur="validateField(name, model![name])"
+          :class="{ 'input-error': errors[name] }"
+        >
           <option v-for="option in field.options" :key="option.value" :value="option.value">{{ option.label }}</option>
         </select>
+        <ErrorMessage :error="errors[name]" />
+      </div>
 
-        <div v-else-if="field.type === 'checkbox'" class="checkbox-container">
-          <input type="checkbox" :id="name" v-model="model![name]" v-bind="field.attrs">
+      <div v-else-if="field.type === 'checkbox'" class="checkbox-container">
+        <div class="checkbox-items">
+          <input
+            type="checkbox"
+            :id="name"
+            v-model="model![name]"
+            v-bind="field.attrs"
+            @blur="validateField(name, model![name])"
+            :class="{ 'input-error': errors[name] }"
+          />
           <label :for="name">{{ field.label }}</label>
         </div>
-      </slot>
+        <div>
+          <ErrorMessage :error="errors[name]" />
+        </div>
+      </div>
     </div>
 
     <div class="buttons">
@@ -83,8 +132,15 @@ const cancel = () => {
 
   .checkbox-container {
     display: flex;
+    flex-direction: column;
     gap: 10px;
-    align-items: center;
+    justify-content: center;
+
+    .checkbox-items {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
     input[type="checkbox"] {
       width: auto;
@@ -96,6 +152,10 @@ const cancel = () => {
       display: inline-block;
       margin-bottom: 0;
     }
+  }
+
+  .input-error {
+    border: $input-error-border;
   }
 }
 

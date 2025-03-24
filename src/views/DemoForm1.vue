@@ -1,17 +1,22 @@
 <script lang="ts" setup>
 import FormGenerator from '@/components/FormGenerator.vue';
+import type { Schema } from '@/types/schema';
 import { ref } from 'vue';
 import { useStore } from 'vuex';
 
 const store = useStore()
 
-const schema = ref({
+const schema = ref<Schema>({
   name: {
     type: 'input',
     label: 'Имя',
     attrs: {
       placeholder: 'Введите имя'
-    }
+    },
+    rules: [
+      (value: any) => value.trim() !== '' || 'Поле обязательно для заполнения',
+      (value: any) => value.trim().length >= 2 || 'Имя должно содержать минимум 2 символа'
+    ]
   },
   email: {
     type: 'input',
@@ -19,7 +24,11 @@ const schema = ref({
     attrs: {
       type: 'email',
       placeholder: 'Введите email'
-    }
+    },
+    rules: [
+      (value: any) => value.trim() !== '' || 'Поле обязательно для заполнения',
+      (value: any) => /.+@.+\..+/.test(value) || 'Неверный формат email'
+    ]
   },
   message: {
     type: 'textarea',
@@ -27,7 +36,10 @@ const schema = ref({
     attrs: {
       rows: 4,
       placeholder: 'Введите сообщение'
-    }
+    },
+    rules: [
+      (value: string) => value.trim().length >= 10 || 'Сообщение должно содержать минимум 10 символов'
+    ]
   }
 })
 
@@ -61,10 +73,3 @@ const resetForm = () => {
     />
   </div>
 </template>
-
-<style lang="scss" scoped>
-h1 {
-  text-align: center;
-  margin-bottom: 10px;
-}
-</style>

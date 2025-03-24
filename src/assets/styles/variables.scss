@@ -1,6 +1,5 @@
 @use "sass:color";
 
-// $primary-color: rgb(177, 120, 214);
 $primary-color: #427fb9;
 $primary-color-hover: color.adjust($primary-color, $lightness: -10%);
 
@@ -16,3 +15,5 @@ $button-text-color: #fff;
 $input-border-color: #ccc;
 $input-border-color-focus: $primary-color;
 
+$input-error: red;
+$input-error-border: 2px solid $input-error;
