@@ -1,4 +1,18 @@
 @use "sass:color";
 
-$primary-color: black;
-$primary-color-hover: color.adjust($primary-color, $lightness: 10%)
+// $primary-color: rgb(177, 120, 214);
+$primary-color: #427fb9;
+$primary-color-hover: color.adjust($primary-color, $lightness: -10%);
+
+$secondary-color: #2c3e50;
+$secondary-color-hover: color.adjust($secondary-color, $lightness: -10%);
+
+$box-color: #fff;
+
+$background-gradient: linear-gradient(135deg, $primary-color, $secondary-color);
+
+$button-text-color: #fff;
+
+$input-border-color: #ccc;
+$input-border-color-focus: $primary-color;
+
