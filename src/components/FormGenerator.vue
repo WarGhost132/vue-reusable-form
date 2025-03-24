@@ -8,7 +8,7 @@ const props = defineProps({
   modelValue: Object
 })
 
-const emit = defineEmits(['update:modelValue', 'save', 'cancel'])
+const emit = defineEmits(['save', 'cancel'])
 
 const model = ref(props.modelValue)
 
