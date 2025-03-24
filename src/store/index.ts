@@ -12,6 +12,9 @@ export default createStore({
     },
     setNotification(state, message) {
       state.notification = message
+    },
+    clearFormData(state) {
+      state.formData = {}
     }
   },
   actions: {
@@ -19,6 +22,7 @@ export default createStore({
       const plainData = toRaw(data.value)
       commit('setFormData', plainData)
       commit('setNotification', `Форма сохранена: ${JSON.stringify(plainData)}`)
+      commit('clearFormData')
     }
   },
   getters: {
